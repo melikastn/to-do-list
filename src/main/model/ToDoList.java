@@ -1,11 +1,19 @@
 package model;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Arrays;
+import java.util.List;
+
 
 //Represents a set of Tasks
-public class ToDoList {
-    private static ArrayList<Task> todo;
+public class ToDoList implements Loadable, Saveable {
+    private ArrayList<Task> todo;
 
     //EFFECTS: set is empty
     public ToDoList() {
@@ -13,56 +21,21 @@ public class ToDoList {
     }
 
 
-    public static void run() {
-        String exit;
-        exit = "exit";
-        System.out.println("Welcome to Melika's To Do List!");
-        Scanner userInput = new Scanner(System.in);
-        System.out.println("what would you like to do");
-        do {
-            System.out.println("[1] add a to do list item" + " [2] cross off an item"
-                    + "[3] show all the items" + " or exit");
-            if (userInput.hasNextInt()) {
-                int option = userInput.nextInt();
-                nextStep(option);
-            } else if (!(userInput.equals("exit"))) {
-                System.out.println("Try Again");
-            }
-        } while (!(exit.equals(userInput.nextLine())));
-    }
-
-
-    //EFFECTS: determine next step based on option
-    private static void nextStep(int option) {
-        Scanner userInput = new Scanner(System.in);
-        if (option == 1) {
-            System.out.println("type the task you want to add and press enter.");
-            Task task1 = new Task(userInput.nextLine());
-            insert(task1);
-
-        } else if (option == 2) {
-            System.out.println("which item would you like to cross off?");
-            findAndCross(userInput.nextInt());
-        } else if (option == 3) {
-            printAll();
-
-        } else {
-            System.out.println("try again!");
-
-        }
-    }
-
     //REQUIRES: that item must be on the list
     //EFFECTS: find i'th task on the list and check it off as done
     //MODIFIES: Task
-    public static void findAndCross(int i) {
+    public void findAndCross(int i) {
         int x = i - 1;
-        Task t = todo.get(x);
+        Task t = getTask(x);
         t.crossOff();
     }
 
+    public Task getTask(int i) {
+        return todo.get(i);
+    }
+
     //EFFECTS: prints every task on the list with its status
-    public static void printAll() {
+    public void printAll() {
         for (Task t : todo) {
             t.printOne();
         }
@@ -70,17 +43,37 @@ public class ToDoList {
 
     // MODIFIES: this
     // EFFECTS: Task s is added to the To Do List
-    public static void insert(Task s) {
+    public void insert(Task s) {
         todo.add(s);
     }
 
-    /*
-    // REQUIRES: String s is an element of the ListofString
-    // MODIFIES: this
-    // EFFECTS: String s is removed from the ListofString
-    public void remove(Task s) { todremove(s); }
+    public void save(String fileName) throws FileNotFoundException {
+        PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
+        for (Task t : todo) {
+            pw.println(t.getStatus() + " " + t.getName());
+        }
+        pw.close();
+    }
 
-     */
+    public void load(String fileName) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get(fileName));
+        for (String line : lines) {
+            ArrayList<String> partsOfLine = splitOnSpace(line);
+            Task task2 = new Task(partsOfLine.get(1) + " " + partsOfLine.get(2));
+            if (partsOfLine.get(0).equals("true")) {
+                task2.crossOff();
+            }
+            insert(task2);
+        }
+    }
+
+    public static ArrayList<String> splitOnSpace(String line) {
+        String[] splits = line.split(" ");
+        return new ArrayList<>(Arrays.asList(splits));
+    }
 
 
+    public int size() {
+        return todo.size();
+    }
 }

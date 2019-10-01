@@ -1,15 +1,11 @@
 package model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import model.Task;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TaskTest {
-
- //   @BeforeEach
     Task s = new Task("do laundry");
 
     @Test
@@ -26,17 +22,27 @@ public class TaskTest {
         assertTrue(s.getStatus());
         s.crossOff();
         assertTrue(s.getStatus());
-
     }
 
-@Test
-    void testDoneOrNotWhenNotDone(){
-        assertEquals("not done yet!",s.doneOrNot());
+    @Test
+    void testDoneOrNotWhenNotDone() {
+        assertEquals("not done yet!", s.doneOrNot());
+    }
+
+    @Test
+    void testDoneOrNOtWhenDone() {
+        s.crossOff();
+        assertEquals("done!", s.doneOrNot());
+    }
+}
+  /*  @Test
+    void testStatementWhenNotDone(){
+        assertEquals("do laundry is not done yet!" , s.statement());
     }
     @Test
-    void testDoneOrNOtWhenDone(){
+    void testStatementWhenDone(){
         s.crossOff();
-        assertEquals("done!",s.doneOrNot());
+        assertEquals("do laundry is done!" , s.statement());
     }
 
-}
+}*/
