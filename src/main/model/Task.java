@@ -30,8 +30,4 @@ public abstract class Task {
     //EFFECTS: return at what stage the task is
     public abstract String doneOrNot();
 
-    //EFFECTS: print the name of the task and whether it's done or not
-    public void printOne() {
-        System.out.println(getName() + doneOrNot());
-    }
 }

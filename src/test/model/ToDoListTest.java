@@ -16,6 +16,23 @@ public class ToDoListTest {
     public void runBefore() {
     }
 
+
+    @Test
+    public void testFindAndCross(){
+        RegularTask s1 = new RegularTask("do laundry");
+        RegularTask s2 = new RegularTask("buy milk");
+        RegularTask s3 = new RegularTask("study spanish");
+        ToDoList todoTest = new ToDoList();
+        todoTest.insert(s1);
+        todoTest.insert(s2);
+        todoTest.insert(s3);
+        assertFalse(s2.getStatus());
+        todoTest.findAndCross(2);
+        assertTrue(s2.getStatus());
+        todoTest.findAndCross(2);
+        assertTrue(s2.getStatus());
+    }
+
     @Test
     public void testLoad() throws IOException {
         RegularTask s1 = new RegularTask("do laundry");
@@ -39,8 +56,17 @@ public class ToDoListTest {
     }
 
     @Test
-    public void testSave() {
-
+    public void testSize() {
+        RegularTask s1 = new RegularTask("do laundry");
+        RegularTask s2 = new RegularTask("buy milk");
+        RegularTask s3 = new RegularTask("study spanish");
+        ToDoList todoTest = new ToDoList();
+        assertEquals(0, todoTest.size());
+        todoTest.insert(s1);
+        assertEquals(1, todoTest.size());
+        todoTest.insert(s2);
+        todoTest.insert(s3);
+        assertEquals(3, todoTest.size());
     }
 }
 

@@ -26,13 +26,13 @@ public class RegularTaskTest {
 
     @Test
     void testDoneOrNotWhenNotDone() {
-        assertEquals("not done yet!", s.doneOrNot());
+        assertEquals( " O", s.doneOrNot());
     }
 
     @Test
     void testDoneOrNOtWhenDone() {
         s.crossOff();
-        assertEquals("done!", s.doneOrNot());
+        assertEquals(" ☑", s.doneOrNot());
     }
 }
 

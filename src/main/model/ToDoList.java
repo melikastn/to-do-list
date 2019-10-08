@@ -37,7 +37,7 @@ public class ToDoList implements Loadable, Saveable {
     //EFFECTS: prints every task on the list with its status
     public void printAll() {
         for (Task t : todo) {
-            t.printOne();
+            System.out.println(t.getName() + t.doneOrNot());
         }
     }
 
