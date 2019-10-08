@@ -37,7 +37,7 @@ public class PriorityTask extends Task {
         if (getStatus()) {
             return " ☑";
         } else {
-            return " O  --" + this.suggest();
+            return " O  -- " + this.suggest();
         }
     }
 
@@ -50,7 +50,7 @@ public class PriorityTask extends Task {
         } else if (this.important) {
             return "plan to do it soon!";
         } else {
-            return "you could just not do it";
+            return "don't worry about it for now";
         }
 
     }

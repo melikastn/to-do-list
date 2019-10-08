@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RegularTaskTest {
-    RegularTask s = new RegularTask("do laundry");
+    Task s = new RegularTask("do laundry");
 
     @Test
     void testCrossOffWhenFalse() {
@@ -35,14 +35,4 @@ public class RegularTaskTest {
         assertEquals("done!", s.doneOrNot());
     }
 }
-  /*  @Test
-    void testStatementWhenNotDone(){
-        assertEquals("do laundry is not done yet!" , s.statement());
-    }
-    @Test
-    void testStatementWhenDone(){
-        s.crossOff();
-        assertEquals("do laundry is done!" , s.statement());
-    }
 
-}*/
