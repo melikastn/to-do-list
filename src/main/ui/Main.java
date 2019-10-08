@@ -1,9 +1,10 @@
 package ui;
 
+import model.PriorityTask;
+import model.RegularTask;
 import model.Task;
 import model.ToDoList;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -35,10 +36,8 @@ public class Main {
         Scanner userInput = new Scanner(System.in);
 
         if (option == 1) {
-            System.out.println("type the task you want to add and press enter.");
-            Task task1;
-            task1 = new Task(userInput.nextLine());
-            todo.insert(task1);
+            System.out.println("R : regular task\nP : priorotize task");
+            makeTask(userInput);
 
         } else if (option == 2) {
             System.out.println("which item would you like to cross off?");
@@ -56,6 +55,42 @@ public class Main {
             todo.load(userInput.next());
         }
     }
+
+    private static void makeTask(Scanner userInput) {
+        Task task1 = null;
+        String priorityOrRegular = userInput.nextLine();
+        if (priorityOrRegular.equals("r") || priorityOrRegular.equals("R")) {
+            System.out.println("what is the task?");
+            task1 = new RegularTask(userInput.nextLine());
+
+        } else if (priorityOrRegular.equals("P") || priorityOrRegular.equals("p")) {
+            task1 = makePriorityTask(userInput);
+        }
+        todo.insert(task1);
+    }
+
+    private static Task makePriorityTask(Scanner userInput) {
+        System.out.println("what is the task?");
+        String name = userInput.nextLine();
+        System.out.println("Is it urgent?\n y : yes\n n : no");
+        String isUrgent = userInput.nextLine();
+        Boolean urgency = yesOrNo(isUrgent);
+        System.out.println("Is it important?\n y : yes\n n : no");
+        String isImportant = userInput.nextLine();
+        Boolean importance = yesOrNo(isImportant);
+        return new PriorityTask(name, urgency, importance);
+    }
+
+    private static Boolean yesOrNo(String isUrgent) {
+        Boolean yesOrNo = null;
+        if (isUrgent.equals("y")) {
+            yesOrNo = true;
+        } else if (isUrgent.equals("n")) {
+            yesOrNo = false;
+        }
+        return yesOrNo;
+    }
+
 
     public static void main(String[] args) throws IOException {
         run();

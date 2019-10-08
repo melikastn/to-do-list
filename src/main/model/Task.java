@@ -1,11 +1,9 @@
 package model;
 
-//Represents a task and whether it's been done yet or not
-public class Task {
-    private String name;
-    private Boolean status;
+public abstract class Task {
+    protected String name;
+    protected Boolean status;
 
-    //construct a task with given name and status false.
     public Task(String name) {
         this.name = name;
         status = false;
@@ -15,7 +13,6 @@ public class Task {
     boolean getStatus() {
         return this.status;
     }
-
 
     //EFFECTS: return name of task
     public String getName() {
@@ -30,15 +27,8 @@ public class Task {
         }
     }
 
-    //EFFECTS: if status is true return "done","not done yet!" otherwise
-    public String doneOrNot() {
-        if (getStatus()) {
-            return " ☑";
-        } else {
-            return  " O";
-        }
-    }
-
+    //EFFECTS: return at what stage the task is
+    public abstract String doneOrNot();
 
     //EFFECTS: print the name of the task and whether it's done or not
     public void printOne() {

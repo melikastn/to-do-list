@@ -8,7 +8,6 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.ArrayList;
 
 public class ToDoListTest {
 
@@ -19,9 +18,9 @@ public class ToDoListTest {
 
     @Test
     public void testLoad() throws IOException {
-        Task s1 = new Task("do laundry");
-        Task s2 = new Task("buy milk");
-        Task s3 = new Task("study spanish");
+        RegularTask s1 = new RegularTask("do laundry");
+        RegularTask s2 = new RegularTask("buy milk");
+        RegularTask s3 = new RegularTask("study spanish");
         ToDoList todoTest = new ToDoList();
         todoTest.insert(s1);
         todoTest.insert(s2);

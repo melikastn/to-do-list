@@ -59,7 +59,7 @@ public class ToDoList implements Loadable, Saveable {
         List<String> lines = Files.readAllLines(Paths.get(fileName));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
-            Task task2 = new Task(partsOfLine.get(1) + " " + partsOfLine.get(2));
+            Task task2 = new RegularTask(partsOfLine.get(1) + " " + partsOfLine.get(2));
             if (partsOfLine.get(0).equals("true")) {
                 task2.crossOff();
             }
