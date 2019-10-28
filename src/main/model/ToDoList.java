@@ -14,6 +14,7 @@ import java.util.List;
 //Represents a set of Tasks
 public class ToDoList implements Loadable, Saveable {
     private ArrayList<Task> todo;
+    public static final int TOO_MANY_THINGS = 10;
 
     //EFFECTS: set is empty
     public ToDoList() {
@@ -35,16 +36,29 @@ public class ToDoList implements Loadable, Saveable {
     }
 
     //EFFECTS: prints every task on the list with its status
-    public void printAll() {
+    public String printAll() {
+        String listOfAll = "";
         for (Task t : todo) {
-            System.out.println(t.getName() + t.doneOrNot());
+            listOfAll = listOfAll + (t.getName() + t.doneOrNot()) + "\n";
         }
+        return listOfAll;
     }
 
     // MODIFIES: this
     // EFFECTS: Task s is added to the To Do List
     public void insert(Task s) {
         todo.add(s);
+    }
+
+    //EFFECTS: return number of unchecked tasks in to do list
+    public int numUncheckedTasks() {
+        int numUncheckedTasks = 0;
+        for (Task t : todo) {
+            if (!t.getStatus()) {
+                numUncheckedTasks++;
+            }
+        }
+        return numUncheckedTasks;
     }
 
     public void save(String fileName) throws FileNotFoundException {
@@ -75,5 +89,11 @@ public class ToDoList implements Loadable, Saveable {
 
     public int size() {
         return todo.size();
+    }
+
+    public void notTooManyTasks() throws TooManyThingsToDoException {
+        if (numUncheckedTasks() >= TOO_MANY_THINGS) {
+            throw new TooManyThingsToDoException();
+        }
     }
 }

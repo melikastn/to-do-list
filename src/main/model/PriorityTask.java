@@ -37,7 +37,7 @@ public class PriorityTask extends Task {
         if (getStatus()) {
             return " ☑";
         } else {
-            return " O  -- " + this.suggest();
+            return " O  --  " + this.suggest();
         }
     }
 
@@ -46,11 +46,11 @@ public class PriorityTask extends Task {
         if (this.important && this.urgent) {
             return "Do it now!!!";
         } else if (this.urgent) {
-            return "get someone to do it for you";
+            return "Get someone to do it for you";
         } else if (this.important) {
-            return "plan to do it soon!";
+            return "Schedule to do it soon!";
         } else {
-            return "don't worry about it for now";
+            return "Don't worry about it for now";
         }
 
     }

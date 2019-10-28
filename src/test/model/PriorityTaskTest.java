@@ -46,10 +46,10 @@ public class PriorityTaskTest {
     }
     @Test
     void testDoneOrNotWhenNotDone() {
-        assertEquals(" O  -- Do it now!!!", s1.doneOrNot());
-        assertEquals(" O  -- get someone to do it for you", s2.doneOrNot());
-        assertEquals(" O  -- plan to do it soon!", s3.doneOrNot());
-        assertEquals(" O  -- don't worry about it for now", s4.doneOrNot());
+        assertEquals(" O  --  Do it now!!!", s1.doneOrNot());
+        assertEquals(" O  --  Get someone to do it for you", s2.doneOrNot());
+        assertEquals(" O  --  Schedule to do it soon!", s3.doneOrNot());
+        assertEquals(" O  --  Don't worry about it for now", s4.doneOrNot());
     }
 
 }

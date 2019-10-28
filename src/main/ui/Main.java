@@ -1,16 +1,17 @@
 package ui;
 
+import model.TooManyThingsToDoException;
 import model.PriorityTask;
 import model.RegularTask;
 import model.Task;
 import model.ToDoList;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static String x;
     static ToDoList todo = new ToDoList();
 
     public static void run() throws IOException {
@@ -32,11 +33,10 @@ public class Main {
     }
 
     //EFFECTS: determine next step based on option
-    public static void nextStep(int option) throws IOException {
+    private static void nextStep(int option) throws IOException {
         Scanner userInput = new Scanner(System.in);
 
         if (option == 1) {
-            System.out.println("R : regular task\nP : priorotize task");
             makeTask(userInput);
 
         } else if (option == 2) {
@@ -44,49 +44,76 @@ public class Main {
             todo.findAndCross(userInput.nextInt());
 
         } else if (option == 3) {
-            todo.printAll();
+            System.out.println(todo.printAll());
 
         } else if (option == 4) {
-            System.out.println("name you file:");
+            System.out.println("name your file:");
             todo.save(userInput.next());
 
         } else if (option == 5) {
-            System.out.println("which file:");
-            todo.load(userInput.next());
+            loadTodoList(userInput);
         }
     }
 
-    private static void makeTask(Scanner userInput) {
-        Task task1 = null;
-        String priorityOrRegular = userInput.nextLine();
-        if (priorityOrRegular.equals("r") || priorityOrRegular.equals("R")) {
-            System.out.println("what is the task?");
-            task1 = new RegularTask(userInput.nextLine());
+    private static void loadTodoList(Scanner userInput) throws IOException {
+        System.out.println("which file:");
+        todo.load(userInput.next());
+    }
 
-        } else if (priorityOrRegular.equals("P") || priorityOrRegular.equals("p")) {
-            task1 = makePriorityTask(userInput);
+    private static void makeTask(Scanner userInput) {
+        try {
+            todo.notTooManyTasks();
+            Task task1 = null;
+            System.out.println("R : regular task\nP : priorotize task");
+            String priorityOrRegular = userInput.nextLine();
+            if (priorityOrRegular.equals("r") || priorityOrRegular.equals("R")) {
+                System.out.println("what is the task?");
+                task1 = new RegularTask(userInput.nextLine());
+
+            } else if (priorityOrRegular.equals("P") || priorityOrRegular.equals("p")) {
+                task1 = makePriorityTask(userInput);
+            }
+            todo.insert(task1);
+        } catch (TooManyThingsToDoException e) {
+            System.out.println("TOO MANY THINGS TO DO! check some tasks off before adding more tasks!");
+        } finally {
+            System.out.println("what would you like to do");
         }
-        todo.insert(task1);
     }
 
     private static Task makePriorityTask(Scanner userInput) {
         System.out.println("what is the task?");
         String name = userInput.nextLine();
-        System.out.println("Is it urgent?\n y : yes\n n : no");
-        String isUrgent = userInput.nextLine();
-        Boolean urgency = yesOrNo(isUrgent);
-        System.out.println("Is it important?\n y : yes\n n : no");
-        String isImportant = userInput.nextLine();
-        Boolean importance = yesOrNo(isImportant);
+
+        Boolean urgency = getState(userInput, "urgent");
+        Boolean importance = getState(userInput, "important");
         return new PriorityTask(name, urgency, importance);
     }
 
-    private static Boolean yesOrNo(String isUrgent) {
-        Boolean yesOrNo = null;
-        if (isUrgent.equals("y")) {
+    @NotNull
+    private static Boolean getState(Scanner userInput, String s) {
+        String msg = "Is it " + s + "?\n y : yes\n n : no";
+        System.out.println(msg);
+        Boolean state = null;
+        while (state == null) {
+            try {
+                String isUrgent = userInput.nextLine();
+                state = yesOrNo(isUrgent);
+            } catch (UnacceptableInputException e) {
+                System.out.println("Try Again!" + " " + msg);
+            }
+        }
+        return state;
+    }
+
+    private static Boolean yesOrNo(String whatIsState) throws UnacceptableInputException {
+        Boolean yesOrNo;
+        if (whatIsState.equals("y") || whatIsState.equals("Y")) {
             yesOrNo = true;
-        } else if (isUrgent.equals("n")) {
+        } else if (whatIsState.equals("n") || whatIsState.equals("N")) {
             yesOrNo = false;
+        } else {
+            throw new UnacceptableInputException();
         }
         return yesOrNo;
     }

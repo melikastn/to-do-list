@@ -34,5 +34,10 @@ public class RegularTaskTest {
         s.crossOff();
         assertEquals(" ☑", s.doneOrNot());
     }
+
+    @Test
+    void testGetName() {
+        assertEquals("do laundry",s.getName());
+    }
 }
 

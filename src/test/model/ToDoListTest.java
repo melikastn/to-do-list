@@ -32,7 +32,7 @@ public class ToDoListTest {
         todoTest.findAndCross(2);
         assertTrue(s2.getStatus());
     }
-
+    /*
     @Test
     public void testLoad() throws IOException {
         RegularTask s1 = new RegularTask("do laundry");
@@ -44,7 +44,6 @@ public class ToDoListTest {
         todoTest.insert(s3);
         todoTest.findAndCross(2);
         ToDoList testLoadTodoList = new ToDoList();
-        testLoadTodoList.load("testLoad1");
         assertEquals(todoTest.size(),testLoadTodoList.size());
         int size = todoTest.size();
         for (int i = 0 ; i < size ; i++){
@@ -54,6 +53,7 @@ public class ToDoListTest {
             assertEquals(expectTask.getStatus(),testTask.getStatus());
         }
     }
+     */
 
     @Test
     public void testSize() {
@@ -62,11 +62,24 @@ public class ToDoListTest {
         RegularTask s3 = new RegularTask("study spanish");
         ToDoList todoTest = new ToDoList();
         assertEquals(0, todoTest.size());
-        todoTest.insert(s1);
+            todoTest.insert(s1);
         assertEquals(1, todoTest.size());
         todoTest.insert(s2);
         todoTest.insert(s3);
         assertEquals(3, todoTest.size());
+    }
+
+    @Test
+    void testPrintAll(){
+        RegularTask s1 = new RegularTask("do laundry");
+        PriorityTask p1 = new PriorityTask("code", true,true);
+        ToDoList todoTest = new ToDoList();
+        todoTest.insert(s1);
+        todoTest.insert(p1);
+        String expectedPrintAll = s1.getName() + s1.doneOrNot() + "\n"
+                + p1.getName() + p1.doneOrNot() + "\n";
+        assertEquals(expectedPrintAll,todoTest.printAll());
+
     }
 }
 
