@@ -5,7 +5,6 @@ import model.PriorityTask;
 import model.RegularTask;
 import model.Task;
 import model.ToDoList;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -90,7 +89,6 @@ public class Main {
         return new PriorityTask(name, urgency, importance);
     }
 
-    @NotNull
     private static Boolean getState(Scanner userInput, String s) {
         String msg = "Is it " + s + "?\n y : yes\n n : no";
         System.out.println(msg);
