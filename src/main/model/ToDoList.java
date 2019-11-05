@@ -59,7 +59,7 @@ public class ToDoList implements Loadable, Saveable {
     }
 
     public void save(String fileName) throws FileNotFoundException {
-        PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
+        PrintWriter pw = new PrintWriter(new FileOutputStream("./data/" + fileName));
         for (Task t : todo) {
             if (t instanceof RegularTask) {
                 pw.println("R" + " " + t.getStatus() + " " + t.getName());
@@ -106,7 +106,7 @@ public class ToDoList implements Loadable, Saveable {
         }
     }
 
-    public ArrayList<String> splitOnSpace(String line) {
+    private ArrayList<String> splitOnSpace(String line) {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }
