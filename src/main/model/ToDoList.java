@@ -74,7 +74,7 @@ public class ToDoList implements Loadable, Saveable {
 
 
     public void load(String fileName) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(fileName));
+        List<String> lines = Files.readAllLines(Paths.get("./data/" + fileName));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
             int size = partsOfLine.size();

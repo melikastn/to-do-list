@@ -10,10 +10,13 @@ public class TestExceptions {
 
     private ToDoList todoTest;
     private Task s1;
+    private Task s2;
 
     @BeforeEach
     void run(){
          s1 = new RegularTask("study");
+         s2 = new PriorityTask("sleep", true, true);
+         s2.crossOff();
          todoTest = new ToDoList();
     }
     @Test
@@ -22,6 +25,7 @@ public class TestExceptions {
 
             for (int i = 0; i < ToDoList.TOO_MANY_THINGS - 1; i++) {
                 todoTest.insert(s1);
+                todoTest.insert(s2);
                 todoTest.notTooManyTasks();
             }
         }
@@ -36,6 +40,7 @@ public class TestExceptions {
 
             for (int i = 0; i < ToDoList.TOO_MANY_THINGS - 1; i++) {
                 todoTest.insert(s1);
+                todoTest.insert(s2);
                 todoTest.notTooManyTasks();
             }
         }

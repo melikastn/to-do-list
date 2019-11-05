@@ -42,7 +42,7 @@ public class ToDoListTest {
         todoTest.insert(s2);
         todoTest.findAndCross(1);
         ToDoList testLoadTodoList = new ToDoList();
-        testLoadTodoList.load("test");
+        testLoadTodoList.load("testLoad1");
         assertEquals(todoTest.size(),testLoadTodoList.size());
         int size = todoTest.size();
         for (int i = 0 ; i < size ; i++){
