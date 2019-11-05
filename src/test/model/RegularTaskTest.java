@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RegularTaskTest {
-    Task s = new RegularTask("do laundry");
+    RegularTask s = new RegularTask("do laundry");
 
     @Test
     void testCrossOffWhenFalse() {

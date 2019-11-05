@@ -1,9 +1,6 @@
 package model;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -64,24 +61,52 @@ public class ToDoList implements Loadable, Saveable {
     public void save(String fileName) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
         for (Task t : todo) {
-            pw.println(t.getStatus() + " " + t.getName());
+            if (t instanceof RegularTask) {
+                pw.println("R" + " " + t.getStatus() + " " + t.getName());
+            } else if (t instanceof PriorityTask) {
+                PriorityTask pt = (PriorityTask) t;
+                pw.println("P" + " " + pt.getStatus() + " " + pt.getImportance() + " "
+                        + pt.getUrgency() + " " + pt.getName());
+            }
         }
         pw.close();
     }
+
 
     public void load(String fileName) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(fileName));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
-            Task task2 = new RegularTask(partsOfLine.get(1) + " " + partsOfLine.get(2));
-            if (partsOfLine.get(0).equals("true")) {
-                task2.crossOff();
+            int size = partsOfLine.size();
+            if (partsOfLine.get(0).equals("R")) {
+                Task t = new RegularTask(partsOfLine.get(2));
+                crossAndInsert(partsOfLine, t);
             }
-            insert(task2);
+            if (partsOfLine.get(0).equals("P")) {
+                Task t = new PriorityTask(partsOfLine.get(4),
+                        toBoolean(partsOfLine.get(3)),
+                        toBoolean(partsOfLine.get(2)));
+                crossAndInsert(partsOfLine, t);
+            }
         }
     }
 
-    public static ArrayList<String> splitOnSpace(String line) {
+    private void crossAndInsert(ArrayList<String> partsOfLine, Task t) {
+        if (partsOfLine.get(1).equals("true")) {
+            t.crossOff();
+        }
+        insert(t);
+    }
+
+    private Boolean toBoolean(String s) {
+        if (s.equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public ArrayList<String> splitOnSpace(String line) {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }
