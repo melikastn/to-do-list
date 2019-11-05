@@ -9,9 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ToDoListTest {
 
@@ -38,7 +36,7 @@ public class ToDoListTest {
     }
 
     @Test
-    public void testLoad() throws IOException {
+    public void testLoad() {
         Task s1 = new RegularTask("laundry");
         Task s2 = new PriorityTask("study", true , false);
         ToDoList todoTest = new ToDoList();
@@ -46,7 +44,11 @@ public class ToDoListTest {
         todoTest.insert(s2);
         todoTest.findAndCross(1);
         ToDoList testLoadTodoList = new ToDoList();
-        testLoadTodoList.load("testLoad1");
+        try {
+            testLoadTodoList.load("testLoad1");
+        } catch (IOException e) {
+            fail("Should not have thrown");
+        }
         assertEquals(todoTest.size(),testLoadTodoList.size());
         int size = todoTest.size();
         for (int i = 0 ; i < size ; i++){
@@ -58,7 +60,7 @@ public class ToDoListTest {
     }
 
     @Test
-    public void testSave() throws IOException {
+    public void testSave() {
         Task s1 = new RegularTask("laundry");
         s1.crossOff();
         Task s2 = new PriorityTask("study", true , false);
@@ -70,10 +72,19 @@ public class ToDoListTest {
         todoTest.insert(s2);
         todoTest.insert(s3);
         todoTest.insert(s4);
-        todoTest.save("testSave");
+        try {
+            todoTest.save("testSave");
+        } catch (FileNotFoundException e) {
+            fail("should not have thrown");
+        }
         String expected = "R true laundry\nP false false true study\nP false true false sleep\n" +
                 "P true false false shopping\n";
-        List<String> lines = Files.readAllLines(Paths.get("./data/" + "testSave"));
+        List<String> lines = null;
+        try {
+            lines = Files.readAllLines(Paths.get("./data/" + "testSave"));
+        } catch (IOException e) {
+            fail("should not have thrown");
+        }
         String actual ="";
         for (String s : lines){
             actual = actual + s + "\n";
