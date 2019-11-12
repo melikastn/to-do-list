@@ -9,7 +9,7 @@ import java.util.List;
 
 
 //Represents a set of Tasks
-public class ToDoList implements Loadable, Saveable {
+public class ToDoList implements Loadable, Saveable, ProjectObserver {
     private ArrayList<Task> todo;
     public static final int TOO_MANY_THINGS = 10;
 
@@ -45,6 +45,7 @@ public class ToDoList implements Loadable, Saveable {
     // EFFECTS: Task s is added to the To Do List
     public void insert(Task s) {
         todo.add(s);
+        s.addObserver(this);
     }
 
     //EFFECTS: return number of unchecked tasks in to do list
@@ -120,5 +121,11 @@ public class ToDoList implements Loadable, Saveable {
         if (numUncheckedTasks() >= TOO_MANY_THINGS) {
             throw new TooManyThingsToDoException();
         }
+    }
+
+    // EFFECTS: prints message to acknowledge notification that task was checked off
+    @Override
+    public void update(Task t) {
+        System.out.println("Good job with " + t.getName());
     }
 }

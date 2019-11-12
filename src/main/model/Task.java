@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Task {
+public abstract class Task extends Subject {
     protected String name;
     protected Boolean status;
 
@@ -24,6 +24,7 @@ public abstract class Task {
     public void crossOff() {
         if (!this.status) {
             this.status = true;
+            notifyObservers(this);
         }
     }
 
