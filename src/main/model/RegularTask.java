@@ -9,7 +9,7 @@ public class RegularTask extends Task {
     }
 
 
-    //EFFECTS: if status is true return "done","not done yet!" otherwise
+    //EFFECTS: if status is true return checked box, " O" otherwise
     @Override
     public String doneOrNot() {
         if (getStatus()) {

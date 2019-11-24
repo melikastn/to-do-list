@@ -1,6 +1,9 @@
 package model;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,11 +31,12 @@ public class ToDoList implements Loadable, Saveable, ProjectObserver {
         t.crossOff();
     }
 
+
     public Task getTask(int i) {
         return todo.get(i);
     }
 
-    //EFFECTS: prints every task on the list with its status
+    //EFFECTS: construct and return a string of every task on the list with its status
     public String printAll() {
         String listOfAll = "";
         for (Task t : todo) {
@@ -59,6 +63,8 @@ public class ToDoList implements Loadable, Saveable, ProjectObserver {
         return numUncheckedTasks;
     }
 
+    //MODIFIES : files
+    //EFFECTS : write every task to a text file with given name
     public void save(String fileName) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter(new FileOutputStream("./data/" + fileName));
         for (Task t : todo) {
@@ -73,18 +79,17 @@ public class ToDoList implements Loadable, Saveable, ProjectObserver {
         pw.close();
     }
 
-
+    //EFFECTS: load the given file by making a todoList of tasks, throw exception if file not found
     public void load(String fileName) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("./data/" + fileName));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
-            int size = partsOfLine.size();
             if (partsOfLine.get(0).equals("R")) {
-                Task t = new RegularTask(partsOfLine.get(2));
+                Task t = new RegularTask(makeName(partsOfLine,false));
                 crossAndInsert(partsOfLine, t);
             }
             if (partsOfLine.get(0).equals("P")) {
-                Task t = new PriorityTask(partsOfLine.get(4),
+                Task t = new PriorityTask(makeName(partsOfLine, true),
                         toBoolean(partsOfLine.get(3)),
                         toBoolean(partsOfLine.get(2)));
                 crossAndInsert(partsOfLine, t);
@@ -92,6 +97,34 @@ public class ToDoList implements Loadable, Saveable, ProjectObserver {
         }
     }
 
+    //helper for load
+    private String makeName(ArrayList<String> list, Boolean isPriorityTask) {
+        ArrayList<String> duplicate = new ArrayList<>();
+        for (String s : list) {
+            duplicate.add(s);
+        }
+        helperMakeName(isPriorityTask, duplicate);
+        String name = "";
+        for (String s : duplicate) {
+            if (name == "") {
+                name = s;
+            } else {
+                name = name + " " + s;
+            }
+        }
+        return name;
+    }
+
+    private void helperMakeName(Boolean isPriorityTask, ArrayList<String> duplicate) {
+        duplicate.remove(0);
+        duplicate.remove(0);
+        if (isPriorityTask) {
+            duplicate.remove(0);
+            duplicate.remove(0);
+        }
+    }
+
+    //helper for load
     private void crossAndInsert(ArrayList<String> partsOfLine, Task t) {
         if (partsOfLine.get(1).equals("true")) {
             t.crossOff();
@@ -99,6 +132,7 @@ public class ToDoList implements Loadable, Saveable, ProjectObserver {
         insert(t);
     }
 
+    //helper for load
     private Boolean toBoolean(String s) {
         if (s.equals("true")) {
             return true;
@@ -107,16 +141,19 @@ public class ToDoList implements Loadable, Saveable, ProjectObserver {
         }
     }
 
+    // helper for load
     private ArrayList<String> splitOnSpace(String line) {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }
 
 
+    //EFFECT : return number of items in todolist
     public int size() {
         return todo.size();
     }
 
+    //EFFECTS : throw TooManyThingToDoException if there are number of unckecked tasks exceed the limit
     public void notTooManyTasks() throws TooManyThingsToDoException {
         if (numUncheckedTasks() >= TOO_MANY_THINGS) {
             throw new TooManyThingsToDoException();

@@ -4,6 +4,7 @@ public abstract class Task extends Subject {
     protected String name;
     protected Boolean status;
 
+    // creats task with name and wether its been done yet or not
     public Task(String name) {
         this.name = name;
         status = false;
@@ -28,7 +29,7 @@ public abstract class Task extends Subject {
         }
     }
 
-    //EFFECTS: return at what stage the task is
+    //EFFECTS: return string indicating the status the task is at based on the type
     public abstract String doneOrNot();
 
 }

@@ -11,11 +11,15 @@ public abstract class Subject {
         observers = new ArrayList<>();
     }
 
+    //MODIFIES : this
+    //EFFECTS : add observer o to subject's observers if not there already
     public void addObserver(ProjectObserver o) {
         if (!observers.contains(o)) {
             observers.add(o);
         }
     }
+    //MODIFIES : this
+    //EFFECTS : remove observer o from subject's observers if there
 
     public void removeObserver(ProjectObserver o) {
         if (observers.contains(o)) {
@@ -24,6 +28,8 @@ public abstract class Subject {
     }
 
 
+    //MODIFIES : ProjectObserver
+    //EFFECTS : call update on all observers
     public void notifyObservers(Task t) {
         for (ProjectObserver o : observers) {
             o.update(t);
